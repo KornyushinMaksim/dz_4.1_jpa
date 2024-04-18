@@ -8,6 +8,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Repository
@@ -33,10 +34,8 @@ public class CameraRepositoryImpl implements CameraRepository{
     }
 
     @Override
-    public Camera getCameraById(UUID id) {
-        return getAllCamera().stream()
-                .filter(camera -> camera.getId().equals(id))
-                .findFirst().orElse(null);
+    public Optional<Camera> getCameraById(UUID id) {
+        return Optional.ofNullable(entityManager.find(Camera.class, id));
     }
 
     @Override

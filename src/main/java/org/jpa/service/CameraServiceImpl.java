@@ -7,8 +7,11 @@ import org.jpa.repository.CameraRepository;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -20,30 +23,37 @@ public class CameraServiceImpl implements CameraService{
     @Transactional
     public void addCamera(Camera camera) {
 
+        cameraRepository.addCamera(camera);
     }
 
     @Override
-    public void deleteCamera(Camera camera) {
+    @Transactional
+    public void deleteCamera(UUID id) {
 
+            Optional<Camera> optionalCamera = cameraRepository.getCameraById(id);
+
+            optionalCamera.ifPresent(cameraRepository::deleteCamera);
     }
 
     @Override
+    @Transactional
     public void updateCamera(Camera camera) {
 
+        cameraRepository.updateCamera(camera);
     }
 
     @Override
-    public Camera getCameraById(UUID id) {
-        return null;
+    public Optional<Camera> getCameraById(UUID id) {
+        return cameraRepository.getCameraById(id);
     }
 
     @Override
     public List<Camera> getCameraByProcessor(Processor processor) {
-        return List.of();
+        return new ArrayList<>(cameraRepository.getCameraByProcessor(processor));
     }
 
     @Override
     public List<Camera> getAllCamera() {
-        return List.of();
+        return cameraRepository.getAllCamera();
     }
 }
